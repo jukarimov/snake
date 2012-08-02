@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <ncurses.h>
 #include <assert.h>
 #include <time.h>
-#include <stdlib.h>
+
+#include <sys/stat.h>
 
 #define maxx	64
 #define maxy	20
@@ -187,6 +189,8 @@ void print_scores()
 	strcat(text, ch);
 	strcat(text, "]");
 
+	chmod("snake.records", 0644);
+
 	FILE *fp = fopen("snake.records", "r");
 	if (!fp) {
 		fp = fopen("snake.records", "w");
@@ -212,6 +216,8 @@ void print_scores()
 		fprintf(fp, "%d\n", total_score);
 		fclose(fp);
 	}
+
+	chmod("snake.records", 0444);
 
 	mvprintw(maxy/2, (maxx / 2)-(strlen(text)/2), text);
 	mvprintw(maxy/2+1, (maxx / 2)-(strlen(text1)/2), text1);
@@ -727,6 +733,11 @@ int main()
 		if (snake.score > map_no * 300) {
 			load_walls();
 			init_snake();
+			erase();
+			draw_borders();
+			draw_walls();
+			draw_snake();
+			gpause();
 		}
 		userctl(getch());
 		usleep(SLEEPT);
