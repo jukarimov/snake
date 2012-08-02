@@ -1,0 +1,11 @@
+Snake clone (no nokia phones were harmed when making this game)
+
+esc	- exit
+wasd 	- control
+
+Map editing:
+	e 	- toggle editing mode
+	space	- put wall
+	x	- del wall
+	p	- save 
+	u	- undo
