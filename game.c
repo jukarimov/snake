@@ -176,7 +176,9 @@ void itoa(int n, char *a)
 void print_scores()
 {
 	char text[100];
-	char ch[10];
+	char text1[100];
+	char ch[100];
+	char tmp[100];
 
 	strcpy(text, "[You scored: ");
 
@@ -185,7 +187,34 @@ void print_scores()
 	strcat(text, ch);
 	strcat(text, "]");
 
+	FILE *fp = fopen("snake.records", "r");
+	if (!fp) {
+		fp = fopen("snake.records", "w");
+		fprintf(fp, "%d\n", total_score);
+		fclose(fp);
+		fp = fopen("snake.records", "r");
+	}
+	if (fgets(tmp, 100, fp) == NULL) {
+		perror("fgets");
+		exit(-1);
+	}
+
+	int rec = atoi(tmp);
+	itoa(rec, ch);
+
+	strcpy(text1, "[Best score: ");
+	strcat(text1, ch);
+	strcat(text1, "]");
+
+	fclose(fp);
+	if (total_score > rec) {
+		fp = fopen("snake.records", "w");
+		fprintf(fp, "%d\n", total_score);
+		fclose(fp);
+	}
+
 	mvprintw(maxy/2, (maxx / 2)-(strlen(text)/2), text);
+	mvprintw(maxy/2+1, (maxx / 2)-(strlen(text1)/2), text1);
 }
 
 void draw_borders();
